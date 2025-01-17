@@ -1,0 +1,8 @@
+crtComp = app.project.activeItem;
+
+for (var i=1;i<=crtComp.numLayers;i++){
+currentLayer = crtComp.layer(i);
+if(currentLayer instanceof TextLayer){
+crtComp.layer(i).name = crtComp.layer(i).text.sourceText.value;
+}
+}

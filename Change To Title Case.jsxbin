@@ -1,0 +1,61 @@
+{
+    function toTitleCase(str) {
+        return str
+            .split(/\s+/) // Split by whitespace
+            .map(function (word) {
+                if (word.length > 0) {
+                    return word[0].toUpperCase() + word.slice(1);
+                }
+                return word;
+            })
+            .join(" "); // Rejoin the words with spaces
+    }
+
+    function convertTextToTitleCase() {
+        var comp = app.project.activeItem;
+
+        if (!comp || !(comp instanceof CompItem)) {
+            alert("Please select a composition.");
+            return;
+        }
+
+        var selectedLayers = comp.selectedLayers;
+
+        if (selectedLayers.length === 0) {
+            alert("Please select at least one text layer.");
+            return;
+        }
+
+        app.beginUndoGroup("Convert Text to Title Case");
+
+        for (var i = 0; i < selectedLayers.length; i++) {
+            var layer = selectedLayers[i];
+            if (layer.property("Source Text")) {
+                var sourceText = layer.property("Source Text").value;
+
+                // Store the original paragraph properties (like alignment)
+                var paragraphProperties = sourceText.paragraphs;
+
+                // Convert the text to Title Case, keeping line breaks
+                var lines = sourceText.text.split("\r"); // Split by line breaks
+                var titleCasedLines = lines.map(function (line) {
+                    return toTitleCase(line); // Apply title case to each line
+                });
+
+                // Join the lines back together with line breaks
+                var newText = titleCasedLines.join("\r");
+
+                // Create a new TextDocument with the updated text
+                var updatedSourceText = new TextDocument(newText);
+                updatedSourceText.paragraphs = paragraphProperties; // Reapply paragraph formatting
+
+                // Set the updated source text with preserved paragraph formatting
+                layer.property("Source Text").setValue(updatedSourceText);
+            }
+        }
+
+        app.endUndoGroup();
+    }
+
+    convertTextToTitleCase();
+}
