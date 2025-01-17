@@ -1,0 +1,27 @@
+// Select all unparented layers in the active composition and parent them to a Null Layer
+(function () {
+    var comp = app.project.activeItem; // Get the active composition
+    if (!(comp instanceof CompItem)) {
+        alert("Please select an active composition.");
+        return;
+    }
+
+    app.beginUndoGroup("Parent Layers to Null");
+
+    // Create a new Null Layer
+    var nullLayer = comp.layers.addNull();
+    nullLayer.name = "Master Control";
+
+    // Center the Null Layer in the composition
+    nullLayer.transform.position.setValue([comp.width / 2, comp.height / 2]);
+
+    // Loop through all layers in the composition and parent only unparented layers to the Null Layer
+    for (var i = 1; i <= comp.numLayers; i++) {
+        var layer = comp.layer(i);
+        if (layer !== nullLayer && layer.parent === null) { // Check if the layer is unparented
+            layer.parent = nullLayer;
+        }
+    }
+
+    app.endUndoGroup();
+})();
