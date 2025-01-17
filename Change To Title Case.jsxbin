@@ -1,3 +1,7 @@
+//This script is to change all the text on screen to be in Title Case. ie. Every Word Will Be In Upper Case. **Singular alphabets too
+//Tested with English, German, French, Polish, Swedish, Spanish, Dutch, Italian.
+//Please let me know if it's bugging out.
+
 {
     function toTitleCase(str) {
         return str
