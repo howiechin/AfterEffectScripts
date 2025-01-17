@@ -1,4 +1,7 @@
-// Make sure there is an active composition and a selected layer
+// This script is to "reload media" without going to the Project Window.
+// Make sure there is an active composition and a selected layer - works with PSD Files. 
+// I haven't gotten a chance to test with other files.
+
 var comp = app.project.activeItem;
 
 if (comp && comp instanceof CompItem) {
