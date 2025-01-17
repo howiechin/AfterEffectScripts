@@ -1,4 +1,6 @@
 // Add Adjustment Layer with Effect.jsx
+// Simple and that's it. I did this because I have a plugin to trigger this. 
+
 try{
     var adjLayer = app.project.activeItem.layers.addSolid([100,100,0], "Adjustment Layer", app.project.activeItem.width, app.project.activeItem.height, app.project.activeItem.pixelAspect, app.project.activeItem.duration);
     adjLayer.adjustmentLayer = true;
