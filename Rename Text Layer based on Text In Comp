@@ -1,3 +1,6 @@
+//This script renames the name of the text layer in the composition according to the current text that is in the active comp.
+//*Text layer names sometimes don't update via duplication - this does that.
+
 crtComp = app.project.activeItem;
 
 for (var i=1;i<=crtComp.numLayers;i++){
