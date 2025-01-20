@@ -14,6 +14,10 @@ ScriptUI Panels
 - Temporary deChild and Temporary deParenting
   - Similar to Social Services except these 2 are seperate Script UI Panels
 
+--------
+
+Scripts
+
 - Change Selected Text To Title Case
   - This will change the text in the selected text layer to be in Title Case.
 
