@@ -29,12 +29,11 @@ Scripts
 
 More to come...maybe :)
 
+-- 18 Jan 2025
 
-  
-## Installation
 
-1. Download or clone the repository.
-2. Open After Effects and run the script from the script editor.
+
+
 
 ## License
 
