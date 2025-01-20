@@ -70,18 +70,17 @@
         try {
             childData = []; // Reset child data
 
-            // DeChild all the child layers
+            // Store parent-child relationships and deParent all child layers
             for (var i = 0; i < childLayers.length; i++) {
                 var childLayer = childLayers[i];
-                var layerPosition = childLayer.position.value;
 
-                // Save child data for reChilding
+                // Save the child and parent indices
                 childData.push({
                     layerIndex: childLayer.index,
-                    parentIndex: parentLayer.index
+                    parentIndex: parentLayer.index,
                 });
 
-                // DeChild the layer
+                // Remove parent relationship
                 childLayer.parent = null;
             }
         } catch (err) {
@@ -107,15 +106,14 @@
         app.beginUndoGroup("ReChild Layers");
 
         try {
+            // Reassign parent relationships
             for (var i = 0; i < childData.length; i++) {
                 var data = childData[i];
-                var layer = comp.layer(data.layerIndex);
+                var childLayer = comp.layer(data.layerIndex);
                 var parentLayer = comp.layer(data.parentIndex);
 
-                if (layer && parentLayer) {
-                    // ReChild the layer back to its original parent
-                    layer.parent = parentLayer;
-                    // No transform modifications; keep current transform values
+                if (childLayer && parentLayer) {
+                    childLayer.parent = parentLayer; // Reassign the parent
                 }
             }
         } catch (err) {
