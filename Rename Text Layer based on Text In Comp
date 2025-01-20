@@ -9,3 +9,26 @@ if(currentLayer instanceof TextLayer){
 crtComp.layer(i).name = crtComp.layer(i).text.sourceText.value;
 }
 }
+
+// Copyright (c) 2025 Howie Chin
+// All rights reserved.
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
+// and associated documentation files (the "Software"), to deal in the Software without restriction, 
+// including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+// and/or sell copies of the Software, subject to the following conditions:
+//
+// The above copyright notice, this permission notice, and the following disclaimer shall be included 
+// in all copies or substantial portions of the Software.
+
+// Disclaimer:
+// This script is provided "as is" without any warranties or guarantees of any kind, express or implied, 
+// including but not limited to the warranties of merchantability, fitness for a particular purpose, 
+// and noninfringement. Use it at your own risk. The author is not responsible for any damage or loss 
+// resulting from the use of this script.
+
+// Attribution:
+// If you modify or redistribute this script, please provide clear credit to the original author, 
+// Howie Chin, and link back to the original GitHub repository: https://github.com/howiechin. 
+
+// If you're forking this script - lemme know - I'd like to see what's improved.
