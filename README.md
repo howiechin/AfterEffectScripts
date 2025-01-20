@@ -4,8 +4,27 @@ This repository contains a collection of After Effects scripts designed to autom
 
 ## Scripts
 
-- **Script 1**: Description of what this script does.
-- **Script 2**: Description of what this script does.
+ScriptUI Panels
+- AE Social Services - combination of deChild/deParenting 
+  - This script allows to temporarily remove Parent-Child linkage with a click.
+  - deChild is for a Parent Layer and will remove the child, allowing adjustments - then you can reChild it to reconnect the linkage.
+  - deParent is for a Child Layer to be delinked from the parent; you can relink it with a click too. (completed this script - and figured that I needed a deChild)
+
+- Temporary deChild and Temporary deParenting
+  - Similar to Social Services except these 2 are seperate Script UI Panels
+
+- Change Selected Text To Title Case
+  - This will change the text in the selected text layer to be in Title Case.
+
+- Reload Media Script
+  - This is to force reload of PSD media that is just saved but failed to refresh quickly in AE. Clicking this will "reload" media without the need to click the project bin
+
+- Super Parent (not too super)
+  - It looks through the composition for any Unparented Layers and parent them to a Null
+
+More to come...maybe :)
+
+
   
 ## Installation
 
