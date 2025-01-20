@@ -1,0 +1,136 @@
+(function TemporaryParenting(thisObj) {
+    // Create the UI
+    function buildUI(thisObj) {
+        var myPanel = (thisObj instanceof Panel) 
+            ? thisObj 
+            : new Window('palette', "Temporary Parenting", undefined, {resizeable: true});
+
+        // Panel orientation
+        myPanel.orientation = "column";
+        myPanel.alignChildren = ["fill", "top"];
+
+        // Add buttons
+        var deChildButton = myPanel.add("button", undefined, "DeChild");
+        var reChildButton = myPanel.add("button", undefined, "ReChild");
+
+        // Assign event handlers to buttons
+        deChildButton.onClick = deChildLayers;
+        reChildButton.onClick = reChildLayers;
+
+        // Finalize layout
+        myPanel.layout.layout(true);
+        myPanel.onResizing = myPanel.onResize = function () {
+            myPanel.layout.resize();
+        };
+
+        return myPanel;
+    }
+
+    // Data storage for child-parent relationships
+    var childData = [];
+
+    // Function to DeChild selected parent layer
+    function deChildLayers() {
+        var comp = app.project.activeItem;
+        if (!(comp && comp instanceof CompItem)) {
+            alert("Please open or select a composition.");
+            return;
+        }
+
+        var selectedLayers = comp.selectedLayers;
+        if (selectedLayers.length !== 1) {
+            alert("Please select exactly one parent layer.");
+            return;
+        }
+
+        var parentLayer = selectedLayers[0];
+        if (!parentLayer) {
+            alert("Selected layer is not a valid layer.");
+            return;
+        }
+
+        // Check if the selected layer has children
+        var hasChildren = false;
+        var childLayers = [];
+        for (var i = 1; i <= comp.numLayers; i++) {
+            var layer = comp.layer(i);
+            if (layer.parent === parentLayer) {
+                hasChildren = true;
+                childLayers.push(layer);
+            }
+        }
+
+        if (!hasChildren) {
+            alert("The selected layer does not have any child layers.");
+            return;
+        }
+
+        app.beginUndoGroup("DeChild Layers");
+
+        try {
+            childData = []; // Reset child data
+
+            // DeChild all the child layers
+            for (var i = 0; i < childLayers.length; i++) {
+                var childLayer = childLayers[i];
+                var layerPosition = childLayer.position.value;
+
+                // Save child data for reChilding
+                childData.push({
+                    layerIndex: childLayer.index,
+                    parentIndex: parentLayer.index
+                });
+
+                // DeChild the layer
+                childLayer.parent = null;
+            }
+        } catch (err) {
+            alert("An error occurred during DeChilding: " + err.message);
+        }
+
+        app.endUndoGroup();
+    }
+
+    // Function to ReChild selected layers to their original parent
+    function reChildLayers() {
+        var comp = app.project.activeItem;
+        if (!(comp && comp instanceof CompItem)) {
+            alert("Please open or select a composition.");
+            return;
+        }
+
+        if (childData.length === 0) {
+            alert("No child data found. Please DeChild layers first.");
+            return;
+        }
+
+        app.beginUndoGroup("ReChild Layers");
+
+        try {
+            for (var i = 0; i < childData.length; i++) {
+                var data = childData[i];
+                var layer = comp.layer(data.layerIndex);
+                var parentLayer = comp.layer(data.parentIndex);
+
+                if (layer && parentLayer) {
+                    // ReChild the layer back to its original parent
+                    layer.parent = parentLayer;
+                    // No transform modifications; keep current transform values
+                }
+            }
+        } catch (err) {
+            alert("An error occurred during ReChilding: " + err.message);
+        }
+
+        app.endUndoGroup();
+    }
+
+    // Initialize the UI
+    var myScriptPanel = buildUI(thisObj);
+    if (myScriptPanel instanceof Window) {
+        myScriptPanel.center();
+        myScriptPanel.show();
+    } else if (myScriptPanel instanceof Panel) {
+        myScriptPanel.layout.layout(true);
+    }
+})(this);
