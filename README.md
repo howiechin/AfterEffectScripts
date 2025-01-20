@@ -1,6 +1,7 @@
 # After Effects Scripts by Howie Chin
 
-This repository contains a collection of After Effects scripts designed to automate various tasks within After Effects. I started creating them because I got tired of doing repetitve tasks, and since I have MoBar, I used some of these scripts as a clickable button.
+This repository contains a collection of After Effects scripts designed to automate various tasks within After Effects. 
+I started creating them because I got tired of doing repetitve tasks, and since I have MoBar, I used some of these scripts as a clickable button.
 The scripts are freely available under the MIT License, but they come with no warranty or guarantee. Use them at your own risk.
 
 ## Scripts
