@@ -1,0 +1,102 @@
+(function TemporaryParenting(thisObj) {
+    // Create the UI
+    function buildUI(thisObj) {
+        var myPanel = (thisObj instanceof Panel) ? thisObj : new Window('palette', "Temporary Parenting");
+
+        // Panel orientation
+        myPanel.orientation = "column";
+
+        // Add buttons
+        var deParentButton = myPanel.add("button", undefined, "DeParent");
+        var reParentButton = myPanel.add("button", undefined, "ReParent");
+
+        // Assign event handlers to buttons
+        deParentButton.onClick = deParentLayers;
+        reParentButton.onClick = reParentLayers;
+
+        // Finalize layout
+        myPanel.layout.layout(true);
+        return myPanel;
+    }
+
+    // Data storage for parent relationships
+    var parentData = [];
+
+    // UI Initialization
+    var w = buildUI(thisObj);
+    if (w.toString() === "[object Panel]") {
+        w;
+    } else {
+        w.show();
+    }
+
+    // Function to DeParent selected layers
+    function deParentLayers() {
+        var comp = app.project.activeItem;
+        if (comp && comp instanceof CompItem) {
+            var selectedLayers = comp.selectedLayers;
+            if (selectedLayers.length === 0) {
+                alert("Please select one or more layers.");
+                return;
+            }
+
+            app.beginUndoGroup("DeParent Layers");
+
+            parentData = []; // Reset parent data
+            for (var i = 0; i < selectedLayers.length; i++) {
+                var layer = selectedLayers[i];
+                parentData.push({
+                    layer: layer.index,
+                    parent: layer.parent ? layer.parent.index : null
+                });
+
+                // Preserve transform values relative to world space
+                var position = layer.position.value;
+                var anchorPoint = layer.anchorPoint.value;
+                var scale = layer.scale.value;
+                var rotation = layer.rotation.value;
+                var orientation = layer.orientation.value;
+
+                layer.parent = null;
+
+                layer.position.setValue(position);
+                layer.anchorPoint.setValue(anchorPoint);
+                layer.scale.setValue(scale);
+                layer.rotation.setValue(rotation);
+                layer.orientation.setValue(orientation);
+            }
+
+            app.endUndoGroup();
+        } else {
+            alert("Please open or select a composition.");
+        }
+    }
+
+    // Function to ReParent selected layers to their original parent
+    function reParentLayers() {
+        var comp = app.project.activeItem;
+        if (comp && comp instanceof CompItem) {
+            if (parentData.length === 0) {
+                alert("No parent data found. Please DeParent layers first.");
+                return;
+            }
+
+            app.beginUndoGroup("ReParent Layers");
+
+            for (var i = 0; i < parentData.length; i++) {
+                var data = parentData[i];
+                var layer = comp.layer(data.layer);
+                var parentLayer = data.parent ? comp.layer(data.parent) : null;
+
+                if (layer) {
+                    layer.parent = parentLayer;
+                }
+            }
+
+            parentData = []; // Clear parent data after ReParenting
+            app.endUndoGroup();
+        } else {
+            alert("Please open or select a composition.");
+        }
+    }
+})(this);
